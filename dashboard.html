@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Smart Campus Monitoring</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div style="width:36px;height:36px;background:rgba(255,255,255,0.15);border-radius:10px;display:flex;align-items:center;justify-content:center;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </div>
+        <span class="sidebar-logo">Smart Campus</span>
+      </div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-link active" data-tab="overview">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Overview
+        </a>
+        <a href="#" class="nav-link" data-tab="tasks">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          Tasks
+        </a>
+        <a href="#" class="nav-link" data-tab="kpi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          KPI Akademik
+        </a>
+        <a href="#" class="nav-link" data-tab="evm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          EVM Performa
+        </a>
+        <a href="#" class="nav-link" data-tab="risk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          Manajemen Risiko
+        </a>
+        <a href="#" class="nav-link" data-tab="budget">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Budget Analysis
+        </a>
+        <a href="#" class="nav-link" data-tab="milestones">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Milestones
+        </a>
+      </nav>
+      <div class="sidebar-footer">v1.0.0</div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Sidebar Overlay (Mobile) -->
+      <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-bar-title" style="display:flex;align-items:center;gap:0.75rem;">
+          <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()">
+            <span></span><span></span><span></span>
+          </button>
+          <h1 id="page-title">Dashboard Overview</h1>
+        </div>
+        <div class="top-bar-actions">
+          <span id="sync-status" class="badge badge-green">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            Connected
+          </span>
+          <button id="btn-refresh" class="btn btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Refresh Data
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <main class="dashboard-content">
+        
+        <!-- SECTION: OVERVIEW -->
+        <section id="tab-overview" class="tab-content active">
+          <div class="stats-grid">
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Overall Progress</span>
+                <div class="stat-icon stat-icon-primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                </div>
+              </div>
+              <div id="gauge-overall-progress" class="gauge-ring-container">
+                <svg class="gauge-ring" viewBox="0 0 120 120">
+                  <circle class="gauge-ring-bg" cx="60" cy="60" r="52" />
+                  <circle class="gauge-ring-fill" cx="60" cy="60" r="52" id="gauge-ring-fill" />
+                </svg>
+                <div class="gauge-ring-label">
+                  <span class="gauge-ring-value" id="gauge-ring-value">0</span>
+                  <span class="gauge-ring-unit">%</span>
+                </div>
+              </div>
+              <div class="card-desc">Persentase penyelesaian seluruh tugas</div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Total Anggaran (Planned)</span>
+                <div class="stat-icon stat-icon-emerald">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                </div>
+              </div>
+              <div class="card-value" id="overview-budget-planned">Rp 0</div>
+              <div class="card-desc">Total alokasi anggaran proyek</div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Schedule Variance (SV)</span>
+                <div class="stat-icon stat-icon-sky">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+              </div>
+              <div class="card-value" id="overview-sv">0</div>
+              <div class="card-desc">Status jadwal pengerjaan</div>
+            </div>
+
+            <div class="card">
+              <div class="card-header">
+                <span class="card-title">Risk Level Utama</span>
+                <div class="stat-icon stat-icon-rose">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+              </div>
+              <div class="card-value" id="overview-risk-level">-</div>
+              <div class="card-desc">Kondisi risiko dominan saat ini</div>
+            </div>
+          </div>
+
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Performance Index (SPI & CPI)</h3>
+              </div>
+              <div id="chart-performance-indices" style="height: 300px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Proyeksi Pengeluaran (EAC vs BAC)</h3>
+              </div>
+              <div id="chart-budget-projection" style="height: 300px;"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: TASKS -->
+        <section id="tab-tasks" class="tab-content">
+          <div class="section-header">
+            <h2>Daftar Tasks</h2>
+            <button class="btn btn-primary" onclick="openAddModal('tasks')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Task
+            </button>
+          </div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table id="table-tasks">
+                <thead>
+                  <tr>
+                    <th>Task ID</th>
+                    <th>Nama Task</th>
+                    <th>Progress</th>
+                    <th>Status</th>
+                    <th>Pic</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: KPI -->
+        <section id="tab-kpi" class="tab-content">
+          <div class="section-header">
+            <h2>Key Performance Indicators (KPI)</h2>
+            <button class="btn btn-primary" onclick="openAddModal('kpi')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah KPI
+            </button>
+          </div>
+          <div class="stats-grid" id="kpi-cards-container"></div>
+          <div class="card">
+            <div class="table-wrapper">
+              <table id="table-kpi">
+                <thead>
+                  <tr>
+                    <th>KPI ID</th>
+                    <th>Nama Indicator</th>
+                    <th>Target</th>
+                    <th>Aktual</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: EVM -->
+        <section id="tab-evm" class="tab-content">
+          <div class="section-header">
+            <h2>Earned Value Management (EVM)</h2>
+            <button class="btn btn-primary" onclick="openAddModal('evm')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Input Data EVM
+            </button>
+          </div>
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">EVM Trend Chart</h3>
+              </div>
+              <div id="chart-evm-trend" style="height: 300px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Ringkasan Nilai EVM</h3>
+              </div>
+              <div class="table-wrapper">
+                <table id="table-evm-summary">
+                  <thead>
+                    <tr>
+                      <th>Metrik</th>
+                      <th>Nilai</th>
+                      <th>Penjelasan</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: RISK -->
+        <section id="tab-risk" class="tab-content">
+          <div class="section-header">
+            <h2>Risk Heatmap & Matrix</h2>
+            <button class="btn btn-primary" onclick="openAddModal('risk')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Risiko
+            </button>
+          </div>
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Matriks Risiko (Heatmap)</h3>
+              </div>
+              <div class="risk-heatmap-container" id="risk-heatmap"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Daftar Risiko Teridentifikasi</h3>
+              </div>
+              <div class="table-wrapper">
+                <table id="table-risk">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Risiko</th>
+                      <th>Likelihood</th>
+                      <th>Impact</th>
+                      <th>Skor</th>
+                      <th>Mitigasi</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: BUDGET -->
+        <section id="tab-budget" class="tab-content">
+          <div class="section-header">
+            <h2>Budget & Cost Analysis</h2>
+            <button class="btn btn-primary" onclick="openAddModal('budget')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Alokasi Budget
+            </button>
+          </div>
+          <div class="grid-2col">
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Planned vs Actual Cost</h3>
+              </div>
+              <div id="chart-budget-comparison" style="height: 300px;"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Rincian Budget</h3>
+              </div>
+              <div class="table-wrapper">
+                <table id="table-budget">
+                  <thead>
+                    <tr>
+                      <th>Kategori</th>
+                      <th>Planned Budget</th>
+                      <th>Actual Cost</th>
+                      <th>Variance</th>
+                      <th>Status</th>
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SECTION: MILESTONES -->
+        <section id="tab-milestones" class="tab-content">
+          <div class="section-header">
+            <h2>Project Milestones</h2>
+            <button class="btn btn-primary" onclick="openAddModal('milestones')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Tambah Milestone
+            </button>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Implementation Timeline</h3>
+            </div>
+            <div id="chart-milestone-timeline" style="height: 250px;"></div>
+          </div>
+          <div class="card" style="margin-top: 1.5rem;">
+            <div class="table-wrapper">
+              <table id="table-milestones">
+                <thead>
+                  <tr>
+                    <th>Milestone</th>
+                    <th>Target Selesai</th>
+                    <th>Realisasi</th>
+                    <th>Status</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- CRUD MODAL -->
+  <div class="modal" id="crud-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">Form Data</h3>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <form id="crud-form" onsubmit="handleFormSubmit(event)">
+        <input type="hidden" id="form-type">
+        <input type="hidden" id="form-id">
+        <div class="modal-body" id="modal-fields"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal()">Batal</button>
+          <button type="submit" class="btn btn-primary">Simpan Data</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/sheets-api.js"></script>
+  <script src="js/tasks.js"></script>
+  <script src="js/kpi.js"></script>
+  <script src="js/evm.js"></script>
+  <script src="js/risk.js"></script>
+  <script src="js/budget.js"></script>
+  <script src="js/milestone.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.querySelector('.sidebar');
+      const overlay = document.getElementById('sidebar-overlay');
+      const hamburger = document.getElementById('hamburger-btn');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('active');
+      hamburger.classList.toggle('active');
+    }
+    // Close sidebar on nav link click (mobile)
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        if (window.innerWidth <= 768) toggleSidebar();
+      });
+    });
+  </script>
+</body>
+</html>
